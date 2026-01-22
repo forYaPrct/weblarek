@@ -136,14 +136,14 @@ interface IBuyer {
 `constructor()` - без параметров.
 
 Поля класса:  
-`products: IProduct[]` - массив всех товаров 
+`products: IProduct[]` - массив всех товаров   
 `selectedProduct: IProduct | null` - товар для подробного отображения.
 
 Методы:  
-`setProducts(products: IProduct[]): void` - сохраняет массив товаров полученный в параметрах.
-`getProducts(): IProduct[]` - возвращает массив товаров products.  
-`getProductById(id: string): IProduct | null` - возвращает объект товара по его id.
-`selectProduct(product: IProduct): void` - сохранение товара для подробного отображения.
+`setProducts(products: IProduct[]): void` - сохраняет массив товаров полученный в параметрах.  
+`getProducts(): IProduct[]` - возвращает массив товаров products.    
+`getProductById(id: string): IProduct | null` - возвращает объект товара по его id.  
+`selectProduct(product: IProduct): void` - сохранение товара для подробного отображения.  
 `getSelectedProduct(): IProduct` - возвращает товар сохраненный для подробного отображения.
 
 #### Класс Cart
@@ -157,12 +157,12 @@ interface IBuyer {
 `cartProducts: IProduct[] | []` - массив выбранных для покупки товаров. 
 
 Методы:  
-`getCartProducts(): IProduct[]` - возвращает массив товаров, которые находятся в корзине.
+`getCartProducts(): IProduct[]` - возвращает массив товаров, которые находятся в корзине.  
 `addProduct(product: IProduct): void` - добавляет товар, который был получен в параметре, в массив корзины.  
-`removeProduct(product: IProduct): void` - удаляет товар, полученный в параметре из массива корзины.
-`clear(): void` - удаляет все товары из корзины.
-`getTotalPrice(): number` - возвращает общую стоимость товаров в корзине.
-`getTotalCount(): number` - возвращает общее количество товаров в корзине.
+`removeProduct(product: IProduct): void` - удаляет товар, полученный в параметре из массива корзины.  
+`clear(): void` - удаляет все товары из корзины.  
+`getTotalPrice(): number` - возвращает общую стоимость товаров в корзине.  
+`getTotalCount(): number` - возвращает общее количество товаров в корзине.  
 `isInCart(id: string): boolean` - проверяет наличие товара в корзине по его id.
 
 #### Класс Buyer
@@ -172,19 +172,19 @@ interface IBuyer {
 Конструктор:  
 `constructor()` - без параметров.
 
-Поля класса:
-`payment: TPayment` - вид оплаты.
-`email: string` - email.
-`phone: string` - номер телефона.
-`address: string` - адреc доставки.
+Поля класса:  
+`payment: TPayment` - вид оплаты.  
+`email: string` - email.  
+`phone: string` - номер телефона.  
+`address: string` - адреc доставки.  
 
 Методы:  
-`setPayment(payment: TPayment): void` - сохраняет способ оплаты.
+`setPayment(payment: TPayment): void` - сохраняет способ оплаты.  
 `setEmail(email: string): void` - сохраняет email.  
-`setPhone(phone: string): void` - сохраняет номер телефона.
-`setAddress(address: string): void` - сохраняет адрес доставки.
-`getBuyerInfo(): IBuyer` - возвращает данные покупателя.
-`clearBuyerInfo(): void` - очищает данные покупателя.
+`setPhone(phone: string): void` - сохраняет номер телефона.  
+`setAddress(address: string): void` - сохраняет адрес доставки.  
+`getBuyerInfo(): IBuyer` - возвращает данные покупателя.  
+`clearBuyerInfo(): void` - очищает данные покупателя.  
 `validate(): {[K in keyof IBuyer]?: string}` - проверка правильности введенных данных.
 
 ### Слой коммуникации
@@ -196,9 +196,9 @@ interface IBuyer {
 Конструктор:  
 `constructor(api: IApi)` - принимает в качестве параметра объект реализующий интерфейс IApi.
 
-Поля класса:
+Поля класса:  
 `api: IApi` - хранит Api клиента.
 
 Методы:  
-`apiGet(): Promise<IProduct[]>` - получает массив товаров с сервера.
+`apiGet(): Promise<IProduct[]>` - получает массив товаров с сервера.  
 `apiPost(email: IOrder): IOrderResponse` - отправляет данные о заказе на сервер.  
