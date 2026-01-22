@@ -98,3 +98,107 @@ Presenter - презентер содержит основную логику п
 `emit<T extends object>(event: string, data?: T): void` - инициализация события. При вызове события в метод передается название события и объект с данными, который будет использован как аргумент для вызова обработчика.  
 `trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void` - возвращает функцию, при вызове которой инициализируется требуемое в параметрах событие с передачей в него данных из второго параметра.
 
+### Данные
+
+#### Товар
+
+```
+interface IProduct {
+  id: string; - уникальный идентификатор товара
+  title: string; - название товара
+  image: string; - URL изображения
+  category: string; - название категории товара
+  price: number | null; - цена товара
+  description: string; - описание товара
+}
+```
+
+#### Покупатель
+
+```
+type TPayment = 'card' | 'cash' | '';
+
+interface IBuyer {
+  payment: TPayment; - способ оплаты
+  email: string; - email покупателя
+  phone: string; - номер телефона покупателя
+  address: string; - адрес доставки
+} 
+```
+
+### Модели данных
+
+#### Класс Catalog
+
+Хранит информацию о товарах, и товаре для подробного отображения.
+
+Конструктор:  
+`constructor()` - без параметров.
+
+Поля класса:  
+`products: IProduct[]` - массив всех товаров 
+`selectedProduct: IProduct | null` - товар для подробного отображения.
+
+Методы:  
+`setProducts(products: IProduct[]): void` - сохраняет массив товаров полученный в параметрах.
+`getProducts(): IProduct[]` - возвращает массив товаров products.  
+`getProductById(id: string): IProduct | null` - возвращает объект товара по его id.
+`selectProduct(product: IProduct): void` - сохранение товара для подробного отображения.
+`getSelectedProduct(): IProduct` - возвращает товар сохраненный для подробного отображения.
+
+#### Класс Cart
+
+Хранит информацию о товарах, выбранных для покупки.
+
+Конструктор:  
+`constructor()` - без параметров.
+
+Поля класса:  
+`cartProducts: IProduct[] | []` - массив выбранных для покупки товаров. 
+
+Методы:  
+`getCartProducts(): IProduct[]` - возвращает массив товаров, которые находятся в корзине.
+`addProduct(product: IProduct): void` - добавляет товар, который был получен в параметре, в массив корзины.  
+`removeProduct(product: IProduct): void` - удаляет товар, полученный в параметре из массива корзины.
+`clear(): void` - удаляет все товары из корзины.
+`getTotalPrice(): number` - возвращает общую стоимость товаров в корзине.
+`getTotalCount(): number` - возвращает общее количество товаров в корзине.
+`isInCart(id: string): boolean` - проверяет наличие товара в корзине по его id.
+
+#### Класс Buyer
+
+Хранит информацию о покупателе.
+
+Конструктор:  
+`constructor()` - без параметров.
+
+Поля класса:
+`payment: TPayment` - вид оплаты.
+`email: string` - email.
+`phone: string` - номер телефона.
+`address: string` - адреc доставки.
+
+Методы:  
+`setPayment(payment: TPayment): void` - сохраняет способ оплаты.
+`setEmail(email: string): void` - сохраняет email.  
+`setPhone(phone: string): void` - сохраняет номер телефона.
+`setAddress(address: string): void` - сохраняет адрес доставки.
+`getBuyerInfo(): IBuyer` - возвращает данные покупателя.
+`clearBuyerInfo(): void` - очищает данные покупателя.
+`validate(): {[K in keyof IBuyer]?: string}` - проверка правильности введенных данных.
+
+### Слой коммуникации
+
+#### Класс LarekApi
+
+Выполняет запрос на сервер с помощью метода get класса Api и получает с сервера объект с массивом товаров.
+
+Конструктор:  
+`constructor(api: IApi)` - принимает в качестве параметра объект реализующий интерфейс IApi.
+
+Поля класса:
+`api: IApi` - хранит Api клиента.
+
+Методы:  
+`apiGet(): Promise<IProduct[]>` - получает массив товаров с сервера.
+`apiPost(email: IOrder): IOrderResponse` - отправляет данные о заказе на сервер.  
