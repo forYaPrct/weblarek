@@ -126,6 +126,33 @@ interface IBuyer {
 } 
 ```
 
+#### Заказ
+
+```
+interface IOrder extends IBuyer {
+    total: number; - общая стоимость заказа
+    items: string[]; - массив id товаров
+}
+```
+
+#### Ответ сервера на заказ
+
+```
+interface IOrderResponse {
+    id: string; - id заказа
+    total: number; - общая стоимость заказа
+}
+```
+
+#### Ответ сервера на запрос товаров
+
+```
+interface ICatalogResponse {
+    total: number; - общее количество товаров
+    items: IProduct[]; - массив товаров
+}
+```
+
 ### Модели данных
 
 #### Класс Catalog
