@@ -9,7 +9,7 @@ export interface IApi {
 export interface IProduct {
     id: string;
     title: string;
-    image: string;
+    image: string | { url: string; alt: string };
     category: string;
     price: number | null;
     description: string;
