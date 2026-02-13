@@ -7,7 +7,7 @@ export interface CardPreviewData extends CardData {
   category: string;
   image: { url: string; alt: string };
   description: string;
-  buttonText: boolean;
+  buttonText: string;
 }
 
 type CategoryKey = keyof typeof categoryMap;
@@ -58,7 +58,11 @@ export class CardPreview extends Card<CardPreviewData> {
     if (value === null) {
       this.priceElement.textContent = "Бесценно";
       this.basketToggleButton.disabled = true;
-    } else this.priceElement.textContent = `${value} синапсов`;
+      // this.basketToggleButton.textContent = "Недоступно";
+    } else {
+      this.priceElement.textContent = `${value} синапсов`;
+      this.basketToggleButton.disabled = false;
+    }
   }
 
   set image(value: { url: string; alt: string }) {
@@ -70,9 +74,7 @@ export class CardPreview extends Card<CardPreviewData> {
     this.descriptionElement.textContent = value;
   }
 
-  set buttonText(value: boolean) {
-    if (value) {
-      this.basketToggleButton.textContent = "Удалить из корзины";
-    } else this.basketToggleButton.textContent = "Купить";
+  set buttonText(value: string) {
+      this.basketToggleButton.textContent = value;
   }
 }

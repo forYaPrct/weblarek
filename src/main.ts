@@ -11,15 +11,7 @@ import { API_URL } from "./utils/constants";
 import { EventEmitter } from "./components/base/Events";
 import { ensureElement, cloneTemplate } from "./utils/utils";
 
-import {
-  IApi,
-  IProduct,
-  IBuyer,
-  ICatalogResponse,
-  IOrder,
-  IOrderResponse,
-  TPayment,
-} from "./types";
+import { IProduct, IBuyer, IOrder, TPayment } from "./types";
 
 import { CardBasket } from "./components/View/Cards/CardBasket";
 import {
@@ -68,7 +60,7 @@ const formOrder = new FormOrder(events, cloneTemplate("#order"));
 
 const formContacts = new FormContacts(events, cloneTemplate("#contacts"));
 
-function FirstErrorText(
+function pickErrorsText(
   errors: { [K in keyof IBuyer]?: string },
   ...keys: (keyof IBuyer)[]
 ): string {
@@ -76,8 +68,8 @@ function FirstErrorText(
   for (let i = 0; i < keys.length; i++) {
     const error = errors[keys[i]];
     if (error) {
-      result = error;
-      break;
+      if (!result) result = error || "";
+      else result = result + ", " + error;
     }
   }
   return result;
@@ -112,7 +104,11 @@ events.on("catalog:preview-change", () => {
       Omit<CardPreviewData, "image"> & { image: { url: string; alt: string } }
     >,
   );
-  altObj.buttonText = cart.isInCart(product.id);
+  if (cart.isInCart(product.id)) {
+    altObj.buttonText = "Удалить из корзины";
+  } else if (product.price == null) {
+    altObj.buttonText = "Недоступно";
+  } else altObj.buttonText = "Купить";
   altObj.image = { url: product.image as string, alt: product.title };
   modal.content = cardPreview.render(altObj);
   modal.open();
@@ -196,8 +192,8 @@ events.on(
     if (field === "phone") {
       buyer.setPhone(value);
     }
-    formOrder.errors = FirstErrorText(buyer.validate(), "payment", "address");
-    formContacts.errors = FirstErrorText(buyer.validate(), "email", "phone");
+    formOrder.errors = pickErrorsText(buyer.validate(), "payment", "address");
+    formContacts.errors = pickErrorsText(buyer.validate(), "email", "phone");
   },
 );
 
@@ -214,21 +210,20 @@ events.on("formContacts:submit", () => {
     phone: buyerInfo.phone,
     address: buyerInfo.address,
     total: cart.getTotalPrice(),
-    items: cart.getCartProducts().map((item) => item.id)
-  }
+    items: cart.getCartProducts().map((item) => item.id),
+  };
 
   larekApi
-  .postOrder(orderInfo)
-  .then((res) => {
-    success.totalAmount = res.total;
-    console.log(res);
-    modal.content = success.render(success);
-    modal.open();
-    buyer.clearBuyerInfo();
-    cart.clear();
-  })
-  .catch((err) => console.error(err));
-})
+    .postOrder(orderInfo)
+    .then((res) => {
+      success.totalAmount = res.total;
+      modal.content = success.render(success);
+      modal.open();
+      buyer.clearBuyerInfo();
+      cart.clear();
+    })
+    .catch((err) => console.error(err));
+});
 
 events.on("success:close", () => {
   modal.close();

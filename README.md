@@ -392,7 +392,7 @@ interface CardCatalogData extends CardData {
 `set category(value: string): void` - устанавливает категорию товара в карточке и добавляет соответствующий класс из categoryMap.  
 `set image(value: string): void` - устанавливает атрибуты src для изображения.  
 `set description(value: string): void` - устанавливает текст подробного описания товара.  
-`set buttonText(value: boolean): void` - устанавливает текст на кнопке добавления(удаления) товара в(из) корзину(ы).  
+`set buttonText(value: string): void` - устанавливает текст на кнопке добавления(удаления) товара в(из) корзину(ы).  
 
 ###### интерфейс CardPreviewData
 
