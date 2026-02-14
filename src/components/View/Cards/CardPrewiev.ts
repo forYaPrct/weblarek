@@ -58,7 +58,6 @@ export class CardPreview extends Card<CardPreviewData> {
     if (value === null) {
       this.priceElement.textContent = "Бесценно";
       this.basketToggleButton.disabled = true;
-      // this.basketToggleButton.textContent = "Недоступно";
     } else {
       this.priceElement.textContent = `${value} синапсов`;
       this.basketToggleButton.disabled = false;
@@ -75,6 +74,6 @@ export class CardPreview extends Card<CardPreviewData> {
   }
 
   set buttonText(value: string) {
-      this.basketToggleButton.textContent = value;
+    this.basketToggleButton.textContent = value;
   }
 }

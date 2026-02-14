@@ -26,7 +26,7 @@ export class FormContacts extends Form<FormContactsData> {
       this.container,
     );
 
-    this.submitButton.addEventListener("click", (event) => {
+    this.container.addEventListener("submit", (event) => {
       event.preventDefault();
       this.events.emit("formContacts:submit");
     });

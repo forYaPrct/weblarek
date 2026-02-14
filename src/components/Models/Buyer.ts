@@ -12,33 +12,25 @@ export class Buyer {
   setPayment(payment: TPayment): void {
     this.payment = payment;
 
-    this.events.emit("buyer:change", {
-      payment: payment,
-    });
+    this.events.emit("buyer:change");
   }
 
   setEmail(email: string): void {
     this.email = email;
 
-    this.events.emit("buyer:change", {
-      email: email,
-    });
+    this.events.emit("buyer:change");
   }
 
   setPhone(phone: string): void {
     this.phone = phone;
 
-    this.events.emit("buyer:change", {
-      phone: phone,
-    });
+    this.events.emit("buyer:change");
   }
 
   setAddress(address: string): void {
     this.address = address;
 
-    this.events.emit("buyer:change", {
-      address: address,
-    });
+    this.events.emit("buyer:change");
   }
 
   getBuyerInfo(): IBuyer {
@@ -56,12 +48,7 @@ export class Buyer {
     this.phone = "";
     this.address = "";
 
-    this.events.emit("buyer:change", {
-      payment: "",
-      email: "",
-      phone: "",
-      address: "",
-    });
+    this.events.emit("buyer:change");
   }
 
   validate(): { [K in keyof IBuyer]?: string } {

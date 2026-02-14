@@ -13,11 +13,7 @@ export class Cart {
   addProduct(product: IProduct): void {
     this.cartProducts.push(product);
 
-    this.events.emit("cart:change", {
-      items: this.cartProducts,
-      total: this.getTotalPrice(),
-      count: this.getTotalCount(),
-    });
+    this.events.emit("cart:change");
   }
 
   removeProduct(product: IProduct): void {
@@ -25,21 +21,13 @@ export class Cart {
       (item) => item.id !== product.id,
     );
 
-    this.events.emit("cart:change", {
-      items: this.cartProducts,
-      total: this.getTotalPrice(),
-      count: this.getTotalCount(),
-    });
+    this.events.emit("cart:change");
   }
 
   clear(): void {
     this.cartProducts = [];
 
-    this.events.emit("cart:change", {
-      items: this.cartProducts,
-      total: this.getTotalPrice(),
-      count: this.getTotalCount(),
-    });
+    this.events.emit("cart:change");
   }
 
   getTotalPrice(): number {

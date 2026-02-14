@@ -492,14 +492,14 @@ interface FormData {
 `addressInputElement: HTMLInputElement` - элемент ввода адреса доставки.  
 
 Методы:  
-`set paymentType(value: TPayment): void` - устанавливает способ оплаты.  
+`set payment(value: TPayment): void` - устанавливает способ оплаты.  
 `set address(value: string): void` - устанавливает адрес доставки.  
 
 ###### интерфейс FormOrderData
 
 ```
 interface FormOrderData extends FormData {
-  paymentType: TPayment;
+  payment: TPayment;
   address: string;
 }
 ```

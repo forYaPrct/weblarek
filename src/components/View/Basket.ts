@@ -43,6 +43,6 @@ export class Basket extends Component<BasketData> {
     else this.basketButton.disabled = false;
   }
   set total(value: number) {
-    this.basketPriceElement.textContent = String(value);
+    this.basketPriceElement.textContent = String(value) + " " + "синапсов";
   }
 }

@@ -130,7 +130,7 @@ events.on("product:toggle-basket", () => {
 });
 
 events.on("basket:open", () => {
-  modal.content = basketView.render(basketView);
+  modal.content = basketView.render();
   modal.open();
 });
 
@@ -140,39 +140,31 @@ events.on<{ id: string }>("basket:item-delete", ({ id }) => {
   cart.removeProduct(item);
 });
 
-events.on(
-  "cart:change",
-  ({
-    items,
-    total,
-    count,
-  }: {
-    items: IProduct[];
-    total: number;
-    count: number;
-  }) => {
-    header.render({ counter: count });
-    const elementItems = items.map((item, index) => {
-      const line = new CardBasket(cloneTemplate("#card-basket"), () => {
-        events.emit("basket:item-delete", { id: item.id });
-      });
-      line.index = index + 1;
-      return line.render(item);
+events.on("cart:change", () => {
+  header.render({ counter: cart.getTotalCount() });
+  const elementItems = cart.getCartProducts().map((item, index) => {
+    const line = new CardBasket(cloneTemplate("#card-basket"), () => {
+      events.emit("basket:item-delete", { id: item.id });
     });
-    basketView.list = elementItems;
-    basketView.total = total;
-  },
-);
+    line.index = index + 1;
+    return line.render(item);
+  });
+  basketView.list = elementItems;
+  basketView.total = cart.getTotalPrice();
+});
 
-events.on("buyer:change", ({ payment, email, phone, address }: IBuyer) => {
-  if (payment !== formOrder.paymentType) formOrder.paymentType = payment;
-  if (address !== formOrder.address) formOrder.address = address;
-  if (email !== formContacts.email) formContacts.email = email;
-  if (phone !== formContacts.phone) formContacts.phone = phone;
+events.on("buyer:change", () => {
+  const buyerInfo = buyer.getBuyerInfo();
+  formOrder.payment = buyerInfo.payment;
+  formOrder.address = buyerInfo.address;
+  formContacts.email = buyerInfo.email;
+  formContacts.phone = buyerInfo.phone;
+  formOrder.errors = pickErrorsText(buyer.validate(), "payment", "address");
+  formContacts.errors = pickErrorsText(buyer.validate(), "email", "phone");
 });
 
 events.on("basket:place-an-order", () => {
-  modal.content = formOrder.render(formOrder);
+  modal.content = formOrder.render();
   modal.open();
 });
 
@@ -180,7 +172,7 @@ events.on(
   "form:change",
   ({ field, value }: { field: string; value: string }) => {
     if (field === "payment") {
-      formOrder.paymentType = value as TPayment;
+      formOrder.payment = value as TPayment;
       buyer.setPayment(value as TPayment);
     }
     if (field === "address") {
@@ -192,13 +184,11 @@ events.on(
     if (field === "phone") {
       buyer.setPhone(value);
     }
-    formOrder.errors = pickErrorsText(buyer.validate(), "payment", "address");
-    formContacts.errors = pickErrorsText(buyer.validate(), "email", "phone");
   },
 );
 
 events.on("formOrder:submit", () => {
-  modal.content = formContacts.render(formContacts);
+  modal.content = formContacts.render();
   modal.open();
 });
 
@@ -217,7 +207,7 @@ events.on("formContacts:submit", () => {
     .postOrder(orderInfo)
     .then((res) => {
       success.totalAmount = res.total;
-      modal.content = success.render(success);
+      modal.content = success.render();
       modal.open();
       buyer.clearBuyerInfo();
       cart.clear();

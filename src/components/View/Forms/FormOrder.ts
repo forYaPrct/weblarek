@@ -4,7 +4,7 @@ import { Form, FormData } from "./Form";
 import { TPayment } from "../../../types/index";
 
 export interface FormOrderData extends FormData {
-  paymentType: TPayment;
+  payment: TPayment;
   address: string;
 }
 
@@ -32,7 +32,7 @@ export class FormOrder extends Form<FormOrderData> {
       this.container,
     );
 
-    this.submitButton.addEventListener("click", (event) => {
+    this.container.addEventListener("submit", (event) => {
       event.preventDefault();
       this.events.emit("formOrder:submit");
     });
@@ -60,7 +60,7 @@ export class FormOrder extends Form<FormOrderData> {
     });
   }
 
-  set paymentType(value: TPayment) {
+  set payment(value: TPayment) {
     this.onlineButton.classList.toggle("button_alt-active", value === "card");
     this.onDeliveryButton.classList.toggle(
       "button_alt-active",
